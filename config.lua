@@ -12,5 +12,10 @@ Config = {
         {days = 42, reward = 6000},  -- 6 weeks
         {days = 49, reward = 7000},  -- 7 weeks
         -- Add more as needed
-    }    
+    },   
+    
+    Discord = {
+        Webhook = 'https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN',
+        Image = ''
+    }
 }

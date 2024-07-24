@@ -1,5 +1,45 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 
+-- Dicord Function for webhook
+local function sendToDiscord(name, date, count, amount)
+    local data = {
+        ["content"] = "",
+        ["embeds"] = {
+            {
+                ["title"] = "Daily Reward Claim",
+                ["color"] = 3066993,  -- Optional: set the embed color (Decimal color code)
+                ["footer"] = {
+                    ["text"] = os.date("%Y-%m-%d %H:%M:%S"),  -- Current timestamp
+                    ["icon_url"] = Config.Discord.Image  -- Optional: set a footer icon URL
+                },
+                ["fields"] = {
+                    {
+                        ["name"] = "Name",
+                        ["value"] = name,
+                        ["inline"] = false
+                    },
+                    {
+                        ["name"] = "Days Claimed",
+                        ["value"] = tostring(count),
+                        ["inline"] = false
+                    },
+                    {
+                        ["name"] = "Amount",
+                        ["value"] = tostring(amount),
+                        ["inline"] = false
+                    }
+                }
+            }
+        }
+    }
+
+    PerformHttpRequest(Config.Discord.Webhook, function(err, text, headers) 
+        if err then
+            print('Error sending to Discord webhook:', err)
+        end
+    end, 'POST', json.encode(data), { ['Content-Type'] = 'application/json' })
+end
+
 -- Function to get the date
 local function getCurrentDate()
     return os.date("%Y-%m-%d")
@@ -60,6 +100,8 @@ local function dailyReward(source)
                 Player.Functions.AddMoney("cash", rewardAmount, "daily-reward")
                 exports.oxmysql:execute('UPDATE player_rewards SET last_claim_date = ?, claim_count = ? WHERE identifier = ?', {os.date("%Y-%m-%d"), newClaimCount, identifier})
                 TriggerClientEvent('QBCore:Notify', source, "You have received your daily reward of $" .. rewardAmount .. ".", "success")
+
+                sendToDiscord(GetPlayerName(source), currentDate, newClaimCount, rewardAmount)
             end
         else
             -- Insert new record for the player
@@ -67,6 +109,8 @@ local function dailyReward(source)
             Player.Functions.AddMoney("cash", rewardAmount, "daily-reward")
             exports.oxmysql:execute('INSERT INTO player_rewards (identifier, last_claim_date, claim_count) VALUES (?, ?, ?)', {identifier, os.date("%Y-%m-%d"), 1})
             TriggerClientEvent('QBCore:Notify', source, "You have received your daily reward of $" .. rewardAmount .. ".", "success")
+
+            sendToDiscord(GetPlayerName(source), currentDate, 1, rewardAmount)
         end
     end)
 end

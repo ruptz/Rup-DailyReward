@@ -6,9 +6,7 @@ author 'Ruptz'
 description 'Simple Daily Reward'
 version '1.0.0'
 
-server_scripts {
-    'server/sv_*.lua'
-}
+server_script 'sv_*.lua'
 
 shared_scripts {
     'config.lua',
