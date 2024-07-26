@@ -1,2 +1,2 @@
-# Rup-DailyReward
- Simple Daily Reward System
+# Install Guide
+https://rup-scripts.gitbook.io/rupscripts/scripts/rup-dailyreward

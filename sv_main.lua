@@ -7,10 +7,10 @@ local function sendToDiscord(name, date, count, amount)
         ["embeds"] = {
             {
                 ["title"] = "Daily Reward Claim",
-                ["color"] = 3066993,  -- Optional: set the embed color (Decimal color code)
+                ["color"] = 3066993,
                 ["footer"] = {
-                    ["text"] = os.date("%Y-%m-%d %H:%M:%S"),  -- Current timestamp
-                    ["icon_url"] = Config.Discord.Image  -- Optional: set a footer icon URL
+                    ["text"] = os.date("%Y-%m-%d %H:%M:%S"),
+                    ["icon_url"] = Config.Discord.Image
                 },
                 ["fields"] = {
                     {
@@ -53,7 +53,7 @@ end
 
 -- Function to calculate rewards
 local function getReward(daysClaimed)
-    local reward = Config.BaseReward  -- Default reward if no match is found
+    local reward = Config.BaseReward
 
     for _, rewardEntry in ipairs(Config.Rewards) do
         if daysClaimed >= rewardEntry.days then
@@ -89,7 +89,6 @@ local function dailyReward(source)
             print('Database Date:', lastClaimDate)
 
             if lastClaimDate == currentDate then
-                -- Player has already claimed reward today
                 TriggerClientEvent('QBCore:Notify', source, "You have already claimed your daily reward for today.", "error")
             else
                 -- Claim count logic
